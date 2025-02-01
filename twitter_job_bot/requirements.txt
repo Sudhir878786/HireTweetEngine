@@ -1,0 +1,5 @@
+tweepy
+requests
+beautifulsoup4
+python-dotenv
+python-jobspy
