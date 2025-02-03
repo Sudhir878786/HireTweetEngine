@@ -2,9 +2,9 @@ import os
 import logging
 import time
 from metathreads import MetaThreads
-import pandas as pd
 from jobspy import scrape_jobs
 from dotenv import load_dotenv
+import pandas as pd
 
 # Load environment variables
 load_dotenv()
@@ -22,11 +22,10 @@ class ThreadsBot:
 
     def post_job(self, job):
         """Post a job on MetaThreads"""
-        job_caption = f"🚀 New Job Alert! 🚀\n\n" \
-                      f"🔹 **Position**: {job['title']}\n" \
-                      f"🔹 **Company**: {job['company']}\n" \
-                      f"🔹 **Location**: {job['location']}\n" \
-                      f"🔹 **Apply Here**: {job['job_url']}\n" \
+        job_caption = f"🚀 **Job Opportunity**: {job['title']}\n" \
+                      f"🏢 **Company**: {job['company']}\n" \
+                      f"📍 **Location**: {job['location']}\n" \
+                      f"🔗 **Apply Here**: {job['job_url']}\n" \
                       f"\n#JobOpportunity #Hiring #Careers #TechJobs"
 
         try:
@@ -45,8 +44,8 @@ class ThreadsBot:
             site_name=["indeed", "linkedin", "zip_recruiter", "glassdoor", "google"],
             search_term="software engineer",
             google_search_term="software engineer jobs near San Francisco, CA since yesterday",
-            location="San Francisco, CA, India",  # Added India location
-            results_wanted=1,  # Fetch one job at a time
+            location="San Francisco, CA",  # Added India location
+            results_wanted=5,  # Fetch multiple jobs
             hours_old=72,
             country_indeed='USA',
         )
@@ -54,9 +53,12 @@ class ThreadsBot:
         logging.info(f"✅ Jobs fetched: {len(jobs)}")
         logging.info(f"Fetched Jobs Structure:\n{jobs.head()}")
 
-        # Post only one job
-        job = jobs.iloc[0]  # Get the first job from the list
-        self.post_job(job)
+        if len(jobs) > 0:
+            # Post only the first job
+            job = jobs.iloc[0]  # Get the first job from the list
+            self.post_job(job)
+        else:
+            logging.info("No jobs found.")
 
 if __name__ == "__main__":
     bot = ThreadsBot()
